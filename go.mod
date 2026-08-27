@@ -9,4 +9,4 @@ require (
 	github.com/tinywasm/model v0.1.7
 )
 
-require github.com/tinywasm/tui v0.1.1
+require github.com/tinywasm/tui v0.1.2
