@@ -4,7 +4,7 @@
 // root stays a WASM-safe leaf contract (Exporter, FieldExt, TopologicalSort)
 // consumed by sqlt/postgres/ormc/sqlmcp, while this package pulls in os/file
 // I/O and the DevTUI execution contract and is only meant to be imported by
-// tinywasm/app's dev console.
+// webtyp/app's dev console.
 package tui
 
 import (
@@ -12,8 +12,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/tinywasm/fmt"
-	"github.com/tinywasm/tui"
+	"webtyp.com/fmt"
+	"webtyp.com/tui"
 )
 
 // ExportFunc produces the DDL SQL for the current project.
@@ -88,7 +88,7 @@ func (h *Handler) SetRootDir(path string) {
 }
 
 // Log message prefix and message constants to avoid repeating string literals.
-// LogOpen/LogClose come from tinywasm/tui (the shared handler contract) rather
+// LogOpen/LogClose come from webtyp/tui (the shared handler contract) rather
 // than being redeclared here — see tui.LogOpen/tui.LogClose usage below.
 const (
 	MsgPrefix        = "ddlc handler: "
@@ -96,7 +96,7 @@ const (
 	MsgExportFailed  = "Export failed: "
 	MsgExportSuccess = "Export successful. Written to: "
 	MsgWriteFailed   = "Write failed: "
-	MsgNoModels      = "No models found — define one in a models.go file (see github.com/tinywasm/model). Nothing exported."
+	MsgNoModels      = "No models found — define one in a models.go file (see webtyp.com/model). Nothing exported."
 	ErrNotConfigured = "ddlc handler: export function not configured"
 )
 
@@ -104,9 +104,9 @@ const (
 // models defined in the project). ExecuteErr shows a friendly message instead
 // of the generic failure one, and — like any non-nil error — never writes a
 // file. Kept decoupled from any specific ExportFunc implementation (e.g.
-// tinywasm/ormc): implementations that aren't ormc-based can return this
+// webtyp/ormc): implementations that aren't ormc-based can return this
 // directly; ormc-based ones go through a translation at their wiring site
-// (see tinywasm/app/section-build.go, which knows about both ormc's
+// (see webtyp/app/section-build.go, which knows about both ormc's
 // ErrNoModelsFound and this sentinel).
 var ErrNothingToExport = fmt.Err("nothing", "to", "export")
 

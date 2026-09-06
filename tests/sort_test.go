@@ -3,9 +3,9 @@ package tests
 import (
 	"testing"
 
-	"github.com/tinywasm/ddlc"
-	"github.com/tinywasm/fmt"
-	"github.com/tinywasm/model"
+	"webtyp.com/ddlc"
+	"webtyp.com/fmt"
+	"webtyp.com/model"
 )
 
 type mockModel struct {

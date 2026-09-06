@@ -1,6 +1,6 @@
 package ddlc
 
-import "github.com/tinywasm/model"
+import "webtyp.com/model"
 
 
 // FieldExt extends model.Field with database-specific metadata (foreign keys).

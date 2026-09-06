@@ -1,27 +1,27 @@
 # PLAN — ddlc: post-split hardening (docs, TUI handler, consumer contract)
 
 > This plan is dispatched via the CodeJob workflow. See skill: agents-workflow.
-> Born from the `tinywasm/orm` repo split (2026-07-10). Self-contained: the
+> Born from the `webtyp/orm` repo split (2026-07-10). Self-contained: the
 > executing agent has zero prior context.
 
 ## Prerequisite (run first)
 
 ```bash
-go install github.com/tinywasm/devflow/cmd/gotest@latest
+go install webtyp.com/devflow/cmd/gotest@latest
 ```
 
 Run all tests with `gotest` (never plain `go test`).
 
 ## Context (zero-context summary)
 
-`github.com/tinywasm/ddlc` was just split out of `github.com/tinywasm/orm`.
-It is the **DDL contract leaf** of the tinywasm SQL ecosystem and must stay a
-leaf: its root module depends ONLY on `tinywasm/model` and `tinywasm/fmt`.
+`webtyp.com/ddlc` was just split out of `webtyp.com/orm`.
+It is the **DDL contract leaf** of the webtyp SQL ecosystem and must stay a
+leaf: its root module depends ONLY on `webtyp/model` and `webtyp/fmt`.
 
 It owns three things (already moved, compiling, tests green):
 
 - `Exporter` (`exporter.go`) — implemented by the SQL compilers
-  (`tinywasm/sqlt`, `tinywasm/postgres`): `ExportDDL(models []model.Model)
+  (`webtyp/sqlt`, `webtyp/postgres`): `ExportDDL(models []model.Model)
   (string, error)` returns CREATE TABLE + indexes in FK dependency order.
 - `TopologicalSort` (`sort.go`) — Kahn's BFS over FK references; models
   expose them via `SchemaExt() []FieldExt`.
@@ -36,12 +36,12 @@ here so this repo's docs describe the contract correctly):
 
 | Consumer | Change |
 |---|---|
-| `tinywasm/sqlt`, `tinywasm/postgres` | import `github.com/tinywasm/orm/ddl` → `github.com/tinywasm/ddlc`; `orm.FieldExt` → `ddlc.FieldExt` |
-| `tinywasm/ormc` (generator) | generated `SchemaExt()` emits `[]ddlc.FieldExt` (its plan, stage 0) |
-| `tinywasm/sqlmcp` | already imports `ddlc` (done in split) |
-| `tinywasm/app` | consumes ddlc through its own TUI handler (stage 2 below) |
+| `webtyp/sqlt`, `webtyp/postgres` | import `webtyp.com/orm/ddl` → `webtyp.com/ddlc`; `orm.FieldExt` → `ddlc.FieldExt` |
+| `webtyp/ormc` (generator) | generated `SchemaExt()` emits `[]ddlc.FieldExt` (its plan, stage 0) |
+| `webtyp/sqlmcp` | already imports `ddlc` (done in split) |
+| `webtyp/app` | consumes ddlc through its own TUI handler (stage 2 below) |
 
-**Ecosystem rules:** no stdlib in WASM-shared code (`tinywasm/fmt`), no
+**Ecosystem rules:** no stdlib in WASM-shared code (`webtyp/fmt`), no
 `any`/`map` in public APIs, typed constants, errors propagate, `gotest` only.
 
 ## Stage 1 — documentation
@@ -58,9 +58,9 @@ here so this repo's docs describe the contract correctly):
 - `cmd/ddlc/README.md`: verify flags/examples still match `main.go` after
   the import rewrite.
 
-## Stage 2 — TUI handler for `tinywasm/app` (zero coupling)
+## Stage 2 — TUI handler for `webtyp/app` (zero coupling)
 
-`tinywasm/app` will consume ormc and ddlc **separately, each with its own
+`webtyp/app` will consume ormc and ddlc **separately, each with its own
 TUI handler**. ormc already has one (`Name() "ORMC"` in its `handler.go`).
 ddlc needs its own so DDL export is a first-class dev-console action.
 
@@ -77,14 +77,14 @@ Create `handler.go` (root package):
 
 ```go
 // ExportFunc produces the full DDL for the current project.
-// tinywasm/app wires it to ormc.ExportSQL + the dialect compiler.
+// webtyp/app wires it to ormc.ExportSQL + the dialect compiler.
 type ExportFunc func() (sql string, err error)
 
 func (h *Handler) SetExport(fn ExportFunc)
 ```
 
 - `Execute() error` (or the devtui execution contract app uses — check
-  `tinywasm/devtui` interfaces and satisfy them **structurally**, never
+  `webtyp/devtui` interfaces and satisfy them **structurally**, never
   importing devtui): runs the injected func, logs the result destination,
   propagates errors. Missing `SetExport` → explicit error (`ddlc handler:
   export function not configured`), never a nil-func panic.
@@ -107,7 +107,7 @@ propagates verbatim.
 ## Acceptance criteria
 
 1. `gotest ./...` green (root module and `cmd/ddlc` build).
-2. Root `go.mod` direct deps: exactly `tinywasm/model`, `tinywasm/fmt`.
+2. Root `go.mod` direct deps: exactly `webtyp/model`, `webtyp/fmt`.
 3. `Handler` satisfies app's TUI contract structurally (no devtui import);
    unset ExportFunc errors explicitly.
 4. README + ARCHITECTURE written as specified; no gonew stub text remains.

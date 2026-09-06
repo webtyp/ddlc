@@ -1,6 +1,6 @@
 package ddlc
 
-import "github.com/tinywasm/model"
+import "webtyp.com/model"
 
 // Exporter is implemented by SQL adapter compilers (sqlt, postgres).
 // ExportDDL returns CREATE TABLE + index statements for all models, in FK dependency order.

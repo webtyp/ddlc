@@ -1,8 +1,8 @@
 package ddlc
 
 import (
-	"github.com/tinywasm/model"
-	"github.com/tinywasm/fmt"
+	"webtyp.com/model"
+	"webtyp.com/fmt"
 )
 
 // TopologicalSort returns models sorted so parents come before children (Kahn's BFS).
