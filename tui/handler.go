@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 
+	wpath "webtyp.com/filepath"
 	"webtyp.com/fmt"
 	"webtyp.com/tui"
 )
@@ -51,7 +52,7 @@ func (h *Handler) Name() string {
 func (h *Handler) Label() string {
 	path := h.outputPath
 	if h.rootDir != "" {
-		path = fmt.PathRelativeTo(path, h.rootDir)
+		path = wpath.RelativeTo(path, h.rootDir)
 	}
 	return "Export SQL DDL → " + path
 }

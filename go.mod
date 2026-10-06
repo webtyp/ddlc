@@ -1,6 +1,6 @@
 module webtyp.com/ddlc
 
-go 1.25.2
+go 1.26.8
 
 // Leaf guarantee: webtyp.com/ddlc must remain a leaf package in the SQL ecosystem.
 // It must depend ONLY on webtyp/model and webtyp/fmt to keep it portable for WASM/frontend.
@@ -10,3 +10,5 @@ require (
 )
 
 require webtyp.com/tui v0.1.3
+
+require webtyp.com/filepath v0.1.0
