@@ -6,7 +6,7 @@ go 1.26.8
 // It must depend ONLY on webtyp/model and webtyp/fmt to keep it portable for WASM/frontend.
 require (
 	webtyp.com/fmt v1.0.0
-	webtyp.com/model v0.2.4
+	webtyp.com/model v0.2.5
 )
 
 require webtyp.com/tui v0.1.3
